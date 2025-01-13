@@ -111,6 +111,17 @@
             padding:  8px 0!important;
         }
 
+        tr.disclaimer td{
+            font-size: 11px!important;
+            text-align: justify;
+            color: #333;
+            padding: 8px 30px!important;
+        }
+
+        tr.disclaimer td:first-child{
+            text-align: center;
+        }
+
         /* Media Queries pour la responsivité */
         @media screen and (max-width: 600px) {
             .main {
@@ -187,7 +198,17 @@
                 </table>
             </td>
         </tr>
+        <tr class="disclaimer">
+            <td class="content">This email was sent to you by Afripay. By using our services, you agree to our customer agreements.</td>
+        </tr>
+        <tr class="disclaimer">
+            <td class="content">All investment services are provided by Afripay’s subsidiaries which are authorised and regulated to provide investment services. If you hold a Jar or an account under Assets, any communication about this will be from representatives of the relevant investment entity. All investment services are provided by the respective Afripay Assets entity in your location.</td>
+        </tr>
+        <tr class="disclaimer">
+            <td class="content" style="text-align: center">© Afripay Finance 2024. All rights reserved.</td>
+        </tr>
     </table>
+
 </center>
 </body>
 </html>

@@ -16,17 +16,21 @@ class DepositMail extends Mailable
 
     public $data;
     public $messageBody;
+    public $pdfPath;
 
     /**
      * Create a new message instance.
      *
      * @param array $data
      * @param string $messageBody
+     * @param mixed $gs
+     * @param string $pdfPath // Chemin du fichier PDF
      */
-    public function __construct($data, $messageBody, public $gs)
+    public function __construct($data, $messageBody, public $gs, $pdfPath)
     {
         $this->data = $data;
         $this->messageBody = $messageBody;
+        $this->pdfPath = $pdfPath;
     }
 
     /**
@@ -43,6 +47,10 @@ class DepositMail extends Mailable
             ->with([
                 'content' => $this->messageBody,
                 'data' => $this->data,
+            ])
+            ->attach($this->pdfPath, [
+                'as' => 'transaction_receipt.pdf',
+                'mime' => 'application/pdf',
             ]);
     }
 }

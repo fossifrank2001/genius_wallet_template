@@ -8,3 +8,4 @@ Route::get('/', function () {
 });
 
 Route::get('template', [HomeController::class, 'template']);
+Route::get('generate-receipt', [HomeController::class, 'generate']);

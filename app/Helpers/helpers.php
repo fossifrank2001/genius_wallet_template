@@ -1,12 +1,14 @@
 <?php
 
 use App\Mail\DepositMail;
+use App\Services\PdfService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 if (! function_exists('mailSend')) {
-    function mailSend($key, array $data, $user): void
+    function mailSend($key, array $data, $user)
     {
         $gs = DB::connection('second_database')->table('generalsettings')->first();
         $template = DB::connection('second_database')->table('email_templates')->where('email_type', $key)->first();
@@ -30,9 +32,31 @@ if (! function_exists('mailSend')) {
                 $messageBody = str_replace("{" . $placeholder . "}", $value, $messageBody);
             }
 
-            //dd($messageBody);
-            Mail::to($user->email)
-                ->send(new DepositMail($data, $messageBody, $gs));
+            $pdfService = app(PdfService::class);
+
+            $logoAfriPay = public_path('assets/images/afripay.png');
+            $logoBase64 = 'data:image/png;base64,' . base64_encode(file_get_contents($logoAfriPay));
+
+            [$filePath, $headers] = $pdfService->dompdf(
+                'pdf.template_receipt',
+                'transaction_receipt',
+                'public',
+                [
+                    'logo' => $logoBase64,
+                    'transactionDate' => '09-11-2024, 08:18 PM',
+                    'transactionType' => 'P2P',
+                    'senderPhone' => '697386078',
+                    'transactionReference' => 'PP241109.2018.C14133',
+                    'amount' => '5075.0',
+                    'receiverPhone' => '694209664',
+                    'title' => 'Transaction Receipt',
+                ]
+            );
+
+            $fullPath = Storage::disk('public')->path($filePath);
+            Mail::to($user->email)->send(new DepositMail($data, $messageBody, $gs, $fullPath));
+
+            Storage::disk('public')->delete($filePath);
         }
 
         if ($gs->sms_notify) {

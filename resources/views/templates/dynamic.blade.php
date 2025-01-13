@@ -34,8 +34,6 @@
                                 <tr>
                                     <td style="overflow-wrap:break-word;word-break:break-word;padding:40px 40px 30px;font-family:'Lato',sans-serif;"
                                         align="left">
-
-{{--                                        @dd($data)--}}
                                         {!! $content !!}
                                     </td>
                                 </tr>
